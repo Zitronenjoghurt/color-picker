@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rc-component/color-picker": "^3.0.2",
+    "radix-ui": "^1.4.3",
     "react": "^19.1.1",
+    "react-color": "^2.19.3",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
