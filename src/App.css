@@ -13,19 +13,27 @@
     touch-action: none;
     width: 300px;
     height: 20px;
+    margin-top: 1.5rem;
 }
 
 .SliderTrack {
-    background-color: #1a1a1a;
+    background: linear-gradient(
+    to right,
+        hsl(0, 100%, 50%),
+        hsl(60, 100%, 50%),
+        hsl(120, 100%, 50%),
+        hsl(180, 100%, 50%),
+        hsl(240, 100%, 50%),
+        hsl(300, 100%, 50%),
+        hsl(360, 100%, 50%)
+    );
     position: relative;
     flex-grow: 1;
-    border-radius: 9999px;
-    height: 3px;
+    height: 15px;
 }
 
 .SliderRange {
     position: absolute;
-    background-color: white;
     border-radius: 9999px;
     height: 100%;
 }
@@ -37,6 +45,8 @@
     background-color: white;
     box-shadow: 0 2px 10px #1a1a1a;
     border-radius: 10px;
+    cursor: grab;
+    padding-top: 0.5rem;
 }
 
 .SliderThumb:hover {
@@ -45,5 +55,10 @@
 
 .SliderThumb:focus {
     outline: none;
-    box-shadow: 0 0 0 5px #1a1a1a;
+    
+}
+
+.SliderThumb:active {
+    cursor: grabbing;
+    transform: scale(1.5);
 }

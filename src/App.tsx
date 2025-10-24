@@ -13,14 +13,19 @@ function App() {
                 <Slider.Root
                     className="SliderRoot"
                     min={0}
-                    max={255}
+                    max={360}
                     step={1}
                     onValueChange={(value) => setHue(value[0])}
                 >
                     <Slider.Track className="SliderTrack">
                         <Slider.Range className="SliderRange"/>
                     </Slider.Track>
-                    <Slider.Thumb className="SliderThumb"/>
+                    <Slider.Thumb 
+                        className="SliderThumb"
+                        style={{
+                            backgroundColor: `hsl(${hue}, 100%, 50%)`
+                        }}
+                    />
                 </Slider.Root>
             </form>
         </>
