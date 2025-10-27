@@ -18,14 +18,14 @@
 
 .SliderTrack {
     background: linear-gradient(
-    to right,
-        hsl(0, 100%, 50%),
-        hsl(60, 100%, 50%),
-        hsl(120, 100%, 50%),
-        hsl(180, 100%, 50%),
-        hsl(240, 100%, 50%),
-        hsl(300, 100%, 50%),
-        hsl(360, 100%, 50%)
+            to right,
+            hsl(0, 100%, 50%),
+            hsl(60, 100%, 50%),
+            hsl(120, 100%, 50%),
+            hsl(180, 100%, 50%),
+            hsl(240, 100%, 50%),
+            hsl(300, 100%, 50%),
+            hsl(360, 100%, 50%)
     );
     position: relative;
     flex-grow: 1;
@@ -55,10 +55,14 @@
 
 .SliderThumb:focus {
     outline: none;
-    
+
 }
 
 .SliderThumb:active {
     cursor: grabbing;
     transform: scale(1.5);
+}
+
+.ColorCanvas {
+    cursor: crosshair;
 }
