@@ -1,11 +1,17 @@
 import * as React from "react";
 import {useEffect, useRef, useState} from "react";
+import {Color} from "../types/Color.ts";
+
+type ColorPickerProps = {
+    color: Color;
+    setColor: (color: Color) => void;
+}
 
 export default function ColorPicker({
-                                        hue = 0
-                                    }) {
+                                        color,
+                                        setColor
+                                    }: ColorPickerProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
     const [pickerPos, setPickerPos] = useState<{ x: number, y: number }>({x: 0, y: 0});
     const [canvasMouseDown, setCanvasMouseDown] = useState<boolean>(false);
 
@@ -19,7 +25,7 @@ export default function ColorPicker({
         const width = canvas.width;
         const height = canvas.height;
 
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillStyle = `hsl(${color.hue * 360}, 100%, 50%)`;
         ctx.fillRect(0, 0, width, height);
 
         // Horizontal
@@ -35,7 +41,7 @@ export default function ColorPicker({
         blackGrad.addColorStop(1, "rgba(0,0,0,1)");
         ctx.fillStyle = blackGrad;
         ctx.fillRect(0, 0, width, height);
-    }, [hue]);
+    }, [color]);
 
     const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
@@ -50,8 +56,7 @@ export default function ColorPicker({
         if (!ctx) return;
 
         const pixel = ctx.getImageData(x, y, 1, 1).data;
-        const hex = `#${((1 << 24) + (pixel[0] << 16) + (pixel[1] << 8) + pixel[2]).toString(16).slice(1)}`;
-        setSelectedColor(hex);
+        setColor(Color.fromRGB(pixel[0], pixel[1], pixel[2]));
     };
 
     return (
@@ -86,8 +91,8 @@ export default function ColorPicker({
                     }}
                 />
             )}
-            <div style={{backgroundColor: selectedColor}}/>
-            <span>{selectedColor}</span>
+            <div style={{backgroundColor: color.toRGBHex()}}/>
+            <span>{color.toRGBHex()}</span>
         </div>
     );
 }

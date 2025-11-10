@@ -2,28 +2,36 @@ import './App.css'
 import ColorPicker from "./components/ColorPicker.tsx";
 import {useState} from "react";
 import {Slider} from "radix-ui";
+import {Color} from "./types/Color.ts";
 
 function App() {
-    const [hue, setHue] = useState(0);
+    const [color, setColor] = useState<Color>(new Color(0, 0, 0));
 
     return (
         <>
-            <ColorPicker hue={hue}/>
+            <ColorPicker color={color} setColor={setColor}/>
             <form>
                 <Slider.Root
                     className="SliderRoot"
                     min={0}
                     max={360}
                     step={1}
-                    onValueChange={(value) => setHue(value[0])}
+                    onValueChange={(value) => {
+                        const newColor = new Color(
+                            value[0] / 360,
+                            color.sat,
+                            color.val
+                        );
+                        setColor(newColor);
+                    }}
                 >
                     <Slider.Track className="SliderTrack">
                         <Slider.Range className="SliderRange"/>
                     </Slider.Track>
-                    <Slider.Thumb 
+                    <Slider.Thumb
                         className="SliderThumb"
                         style={{
-                            backgroundColor: `hsl(${hue}, 100%, 50%)`
+                            backgroundColor: `hsl(${color.hue * 100}%, ${color.sat * 100}%, ${color.val * 100}%)`
                         }}
                     />
                 </Slider.Root>
