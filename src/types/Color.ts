@@ -40,6 +40,11 @@ export class Color {
         return new Color(hue / 360, sat / 100, val / 100);
     }
 
+    static fromRGBHex(hex: string): Color {
+        const [r, g, b] = hex.slice(1).match(/.{1,2}/g)!.map(x => parseInt(x, 16));
+        return Color.fromRGB(r, g, b);
+    }
+
     // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
     toRGB(this: Color): [number, number, number] {
         const hue = this.hue * 360;

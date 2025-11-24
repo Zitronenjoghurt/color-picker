@@ -56,7 +56,9 @@ export default function ColorPicker({
         if (!ctx) return;
 
         const pixel = ctx.getImageData(x, y, 1, 1).data;
-        setColor(Color.fromRGB(pixel[0], pixel[1], pixel[2]));
+        const pickedColor = Color.fromRGB(pixel[0], pixel[1], pixel[2]);
+
+        setColor(new Color(color.hue, pickedColor.sat, pickedColor.val));
     };
 
     return (
@@ -92,7 +94,6 @@ export default function ColorPicker({
                 />
             )}
             <div style={{backgroundColor: color.toRGBHex()}}/>
-            <span>{color.toRGBHex()}</span>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import ColorPicker from "./components/ColorPicker.tsx";
 import {useState} from "react";
 import {Slider} from "radix-ui";
 import {Color} from "./types/Color.ts";
+import ColorCodeField from "./components/ColorCodeField.tsx";
 
 function App() {
     const [color, setColor] = useState<Color>(new Color(0, 0, 0));
@@ -16,6 +17,7 @@ function App() {
                     min={0}
                     max={360}
                     step={1}
+                    value={[color.hue * 360]}
                     onValueChange={(value) => {
                         const newColor = new Color(
                             value[0] / 360,
@@ -36,6 +38,7 @@ function App() {
                     />
                 </Slider.Root>
             </form>
+            <ColorCodeField color={color} setColor={setColor}/>
         </>
     )
 }
