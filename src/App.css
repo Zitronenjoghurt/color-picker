@@ -3,6 +3,9 @@
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .SliderRoot {
@@ -40,7 +43,7 @@
 
 .SliderThumb {
     display: block;
-    width: 20px;
+    width: 15px;
     height: 20px;
     background-color: white;
     box-shadow: 0 2px 10px #1a1a1a;
