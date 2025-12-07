@@ -4,12 +4,15 @@ import {useState} from "react";
 import {Slider} from "radix-ui";
 import {Color} from "./types/Color.ts";
 import ColorCodeField from "./components/ColorCodeField.tsx";
+import ColorCodeFieldDummy from './components/ColorCodeFieldDummy.tsx';
 
 function App() {
     const [color, setColor] = useState<Color>(new Color(0, 0, 0));
 
     return (
         <>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+            <div style={{flexDirection: 'column'}}>
             <ColorPicker color={color} setColor={setColor}/>
             <form>
                 <Slider.Root
@@ -38,7 +41,16 @@ function App() {
                     />
                 </Slider.Root>
             </form>
+            </div >
+            <div style={{display: "flex", flexDirection:"column"}}>
             <ColorCodeField color={color} setColor={setColor}/>
+            <ColorCodeFieldDummy placeholder='0x hex'/>
+            <ColorCodeFieldDummy placeholder='hex ohne'/>
+            <ColorCodeFieldDummy placeholder='r,g,b'/>
+            <ColorCodeFieldDummy placeholder='(r,g,b)'/>
+            <ColorCodeFieldDummy placeholder='rgb(r,g,b)'/>
+            </div>
+        </div>
         </>
     )
 }

@@ -1,29 +1,16 @@
-import {Color} from "../types/Color.ts";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 type ColorCodeFieldProps = {
-    color: Color;
-    setColor: (color: Color) => void;
-}
+  placeholder?: string;
+};
 
-export default function ColorCodeField({
-                                           color,
-                                           setColor
-                                       }: ColorCodeFieldProps) {
-    const [colorBuffer, setColorBuffer] = useState<string>(color.toRGBHex());
+export default function ColorCodeField({placeholder} : ColorCodeFieldProps) {
     const [showToast, setShowToast] = useState(false);
 
-    useEffect(() => {
-        setColorBuffer(color.toRGBHex());
-    }, [color]);
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(colorBuffer)
-            .then(() => {
-                setShowToast(true);
-                setTimeout(() => setShowToast(false), 2000);
-            })
-            .catch(err => console.error('Failed to copy: ', err));
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2000);
     };    
 
     return (
@@ -31,9 +18,7 @@ export default function ColorCodeField({
             <div style={{position: 'relative', display: 'inline-block', alignItems: 'center'}}>
                 <input
                     type="text"
-                    value={colorBuffer}
-                    onChange={(e) => setColorBuffer(e.target.value)}
-                    onBlur={() => setColor(Color.fromRGBHex(colorBuffer))}
+                    placeholder={placeholder}
                     style={{
                         marginBottom: '25px',
                         padding: '5px 45px',
