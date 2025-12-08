@@ -21,7 +21,7 @@ export class Color {
 
         let hue = 0;
         let sat = 0;
-        let val = max;
+        const val = max;
 
         if (delta !== 0) {
             if (max === r) {
@@ -40,8 +40,9 @@ export class Color {
         return new Color(hue / 360, sat / 100, val / 100);
     }
 
-    static fromRGBHex(hex: string): Color {
-        const [r, g, b] = hex.slice(1).match(/.{1,2}/g)!.map(x => parseInt(x, 16));
+    static fromRGBHex(hex: string): Color | null {
+        if (hex.length !== 6) return null;
+        const [r, g, b] = hex.match(/.{1,2}/g)!.map(x => parseInt(x, 16));
         return Color.fromRGB(r, g, b);
     }
 
@@ -83,6 +84,10 @@ export class Color {
 
     toRGBHex(this: Color): string {
         const [r, g, b] = this.toRGB();
-        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        return `${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+
+    isValid(this: Color): boolean {
+        return !isNaN(this.hue) && !isNaN(this.sat) && !isNaN(this.val)
     }
 }

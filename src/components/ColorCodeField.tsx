@@ -1,21 +1,81 @@
 import {Color} from "../types/Color.ts";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 type ColorCodeFieldProps = {
     color: Color;
     setColor: (color: Color) => void;
+    color_format: ColorFormat;
 }
+
+export const ColorFormat = {
+    HEX_hashtag: '#FFFFFF',
+    HEX_0x: '0xFFFFFF',
+    HEX: 'FFFFFF',
+    RGB: 'r,g,b',
+    RGB_parentheses: '(r,g,b)',
+    RGB_parentheses_and_text: 'rgb(r,g,b)',
+} as const;
+export type ColorFormat = typeof ColorFormat[keyof typeof ColorFormat];
 
 export default function ColorCodeField({
                                            color,
-                                           setColor
+                                           setColor,
+                                           color_format = ColorFormat.HEX
                                        }: ColorCodeFieldProps) {
-    const [colorBuffer, setColorBuffer] = useState<string>(color.toRGBHex());
+    const format_color = useCallback((color: Color) => {
+        const [r, g, b] = color.toRGB();
+
+        switch (color_format) {
+            case ColorFormat.HEX_hashtag:
+                return `#${color.toRGBHex()}`;
+            case ColorFormat.HEX_0x:
+                return `0x${color.toRGBHex()}`;
+            case ColorFormat.HEX:
+                return color.toRGBHex();
+            case ColorFormat.RGB:
+                return `${r},${g},${b}`;
+            case ColorFormat.RGB_parentheses:
+                return `(${r},${g},${b})`;
+            case ColorFormat.RGB_parentheses_and_text:
+                return `rgb(${r},${g},${b})`;
+        }
+    }, [color_format])
+
+    const parse_color = useCallback((color: string) => {
+        switch (color_format) {
+            case ColorFormat.HEX_hashtag:
+                return Color.fromRGBHex(color.replace('#', ''));
+            case ColorFormat.HEX_0x:
+                return Color.fromRGBHex(color.replace('0x', ''));
+            case ColorFormat.HEX:
+                return Color.fromRGBHex(color);
+            case ColorFormat.RGB:
+                try {
+                    return Color.fromRGB(parseInt(color.split(',')[0]), parseInt(color.split(',')[1]), parseInt(color.split(',')[2]));
+                } catch (e) {
+                    return null;
+                }
+            case ColorFormat.RGB_parentheses:
+                try {
+                    return Color.fromRGB(parseInt(color.split('(')[1].split(',')[0]), parseInt(color.split('(')[1].split(',')[1]), parseInt(color.split('(')[1].split(',')[2]));
+                } catch (e) {
+                    return null;
+                }
+            case ColorFormat.RGB_parentheses_and_text:
+                try {
+                    return Color.fromRGB(parseInt(color.split('rgb(')[1].split(',')[0]), parseInt(color.split('rgb(')[1].split(',')[1]), parseInt(color.split('rgb(')[1].split(',')[2]));
+                } catch (e) {
+                    return null;
+                }
+        }
+    }, [color_format])
+
+    const [colorBuffer, setColorBuffer] = useState<string>(format_color(color));
     const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
-        setColorBuffer(color.toRGBHex());
-    }, [color]);
+        setColorBuffer(format_color(color));
+    }, [color, format_color]);
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(colorBuffer)
@@ -24,7 +84,16 @@ export default function ColorCodeField({
                 setTimeout(() => setShowToast(false), 2000);
             })
             .catch(err => console.error('Failed to copy: ', err));
-    };    
+    };
+
+    const onBlur = useCallback(() => {
+        const parsedColor = parse_color(colorBuffer);
+        if (parsedColor && parsedColor.isValid()) {
+            setColor(parsedColor);
+        } else {
+            setColorBuffer(format_color(color));
+        }
+    }, [color, colorBuffer, format_color, parse_color, setColor])
 
     return (
         <>
@@ -33,7 +102,7 @@ export default function ColorCodeField({
                     type="text"
                     value={colorBuffer}
                     onChange={(e) => setColorBuffer(e.target.value)}
-                    onBlur={() => setColor(Color.fromRGBHex(colorBuffer))}
+                    onBlur={() => onBlur()}
                     style={{
                         marginBottom: '25px',
                         padding: '5px 45px',
@@ -46,10 +115,13 @@ export default function ColorCodeField({
                         border: '1px dashed #ccc',
                         backgroundColor: '#f9f9f9',
                         marginLeft: '30px',
+                        WebkitUserSelect: 'none',
+                        userSelect: 'none',
+                        msUserSelect: 'none',
                     }}
                 />
 
-            {/* Copy button */}
+                {/* Copy button */}
                 <button
                     onClick={copyToClipboard}
                     style={{
@@ -64,7 +136,7 @@ export default function ColorCodeField({
                     }}
                 >
                     Copy
-                </button>    
+                </button>
             </div>
             {showToast && (
                 <div
