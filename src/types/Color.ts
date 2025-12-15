@@ -11,9 +11,9 @@ export class Color {
 
     // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
     static fromRGB(red: number, green: number, blue: number): Color {
-        const r = red / 255;
-        const g = green / 255;
-        const b = blue / 255;
+        const r = (red % 255) / 255;
+        const g = (green % 255) / 255;
+        const b = (blue % 255) / 255;
 
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
@@ -27,17 +27,19 @@ export class Color {
             if (max === r) {
                 hue = 60 * (((g - b) / delta) % 6);
             } else if (max === g) {
-                hue = 60 * (((b - r) / delta) + 2);
+                hue = 60 * ((b - r) / delta + 2);
             } else if (max === b) {
-                hue = 60 * (((r - g) / delta) + 4);
+                hue = 60 * ((r - g) / delta + 4);
             }
         }
+
+        if (hue < 0) hue += 360;
 
         if (max !== 0) {
             sat = delta / max;
         }
 
-        return new Color(hue / 360, sat / 100, val / 100);
+        return new Color(hue / 360, sat, val);
     }
 
     static fromRGBHex(hex: string): Color | null {
@@ -49,8 +51,8 @@ export class Color {
     // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
     toRGB(this: Color): [number, number, number] {
         const hue = this.hue * 360;
-        const sat = this.sat * 100;
-        const val = this.val * 100;
+        const sat = this.sat;
+        const val = this.val;
 
         const c = val * sat;
         const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
@@ -59,27 +61,38 @@ export class Color {
         let r = 0;
         let g = 0;
         let b = 0;
+
         if (hue < 60) {
             r = c;
             g = x;
+            b = 0;
         } else if (hue < 120) {
             r = x;
             g = c;
+            b = 0;
         } else if (hue < 180) {
+            r = 0;
             g = c;
             b = x;
         } else if (hue < 240) {
+            r = 0;
             g = x;
             b = c;
         } else if (hue < 300) {
             r = x;
+            g = 0;
             b = c;
         } else {
             r = c;
+            g = 0;
             b = x;
         }
 
-        return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+        return [
+            Math.round((r + m) * 255),
+            Math.round((g + m) * 255),
+            Math.round((b + m) * 255)
+        ];
     }
 
     toRGBHex(this: Color): string {
@@ -88,6 +101,6 @@ export class Color {
     }
 
     isValid(this: Color): boolean {
-        return !isNaN(this.hue) && !isNaN(this.sat) && !isNaN(this.val)
+        return !isNaN(this.hue) && !isNaN(this.sat) && !isNaN(this.val);
     }
 }
