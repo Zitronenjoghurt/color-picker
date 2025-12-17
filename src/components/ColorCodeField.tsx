@@ -105,11 +105,11 @@ export default function ColorCodeField({
                     onBlur={() => onBlur()}
                     style={{
                         marginBottom: '25px',
-                        padding: '5px 45px',
+                        padding: '5px 30px',
                         fontSize: '16px',
                         fontFamily: 'monospace',
                         fontWeight: 'bold',
-                        width: '100px',
+                        width: '160px',
                         textAlign: 'center',
                         borderRadius: '6px',
                         border: '1px dashed #ccc',

@@ -103,4 +103,10 @@ export class Color {
     isValid(this: Color): boolean {
         return !isNaN(this.hue) && !isNaN(this.sat) && !isNaN(this.val);
     }
+
+    toCssRGB(this: Color): string {
+        const [r, g, b] = this.toRGB();
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
 }
