@@ -48,12 +48,12 @@ function App() {
                                 setColor(newColor);
                             }}
                         >
-                        <Slider.Track className="SliderTrack">
-                            <Slider.Range className="SliderRange"/>
-                        </Slider.Track>
-                        <Slider.Thumb
-                            className="SliderThumb"
-                        />
+                            <Slider.Track className="SliderTrack">
+                                <Slider.Range className="SliderRange"/>
+                            </Slider.Track>
+                            <Slider.Thumb
+                                className="SliderThumb"
+                            />
                         </Slider.Root>
 
                         {/* Saturation Slider */}
@@ -72,12 +72,12 @@ function App() {
                                 setColor(newColor);
                             }}
                         >
-                        <Slider.Track className="SliderTrack"
-                            style={{background: saturationGradient}}>
-                            <Slider.Range className="SliderRange"/>
-                        </Slider.Track>
-                        <Slider.Thumb
-                            className="SliderThumb"/>
+                            <Slider.Track className="SliderTrack"
+                                          style={{background: saturationGradient}}>
+                                <Slider.Range className="SliderRange"/>
+                            </Slider.Track>
+                            <Slider.Thumb
+                                className="SliderThumb"/>
                         </Slider.Root>
 
                         {/* Value Slider */}
@@ -96,13 +96,13 @@ function App() {
                                 setColor(newColor);
                             }}
                         >
-                        <Slider.Track className="SliderTrack"
-                            style={{background: valueGradient}}>
-                            <Slider.Range className="SliderRange"/>
-                        </Slider.Track>
-                        <Slider.Thumb
-                            className="SliderThumb"
-                        />
+                            <Slider.Track className="SliderTrack"
+                                          style={{background: valueGradient}}>
+                                <Slider.Range className="SliderRange"/>
+                            </Slider.Track>
+                            <Slider.Thumb
+                                className="SliderThumb"
+                            />
                         </Slider.Root>
                     </form>
                 </div>
@@ -112,18 +112,19 @@ function App() {
                     <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.HEX}/>
                     <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.RGB}/>
                     <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.RGB_parentheses}/>
-                    <ColorCodeField color={color} setColor={setColor}color_format={ColorFormat.RGB_parentheses_and_text}/>
-                    <div 
+                    <ColorCodeField color={color} setColor={setColor}
+                                    color_format={ColorFormat.RGB_parentheses_and_text}/>
+                    <div
                         style={{
-                            backgroundColor: color.toCssRGB(), 
-                            width: '100px', 
-                            height: '100px', 
-                            marginLeft: '30px', 
+                            backgroundColor: color.toCssRGB(),
+                            width: '100px',
+                            height: '100px',
+                            marginLeft: '30px',
                             border: 'solid #ccc 1px'
                         }}>
                     </div>
                 </div>
-                
+
             </div>
         </>
     )

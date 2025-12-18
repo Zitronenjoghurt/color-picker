@@ -103,6 +103,11 @@ export default function ColorCodeField({
                     value={colorBuffer}
                     onChange={(e) => setColorBuffer(e.target.value)}
                     onBlur={() => onBlur()}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.currentTarget.blur();
+                        }
+                    }}
                     style={{
                         marginBottom: '25px',
                         padding: '5px 30px',

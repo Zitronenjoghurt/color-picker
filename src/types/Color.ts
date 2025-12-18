@@ -11,9 +11,9 @@ export class Color {
 
     // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
     static fromRGB(red: number, green: number, blue: number): Color {
-        const r = (red % 255) / 255;
-        const g = (green % 255) / 255;
-        const b = (blue % 255) / 255;
+        const r = Math.min(255, Math.max(0, red)) / 255;
+        const g = Math.min(255, Math.max(0, green)) / 255;
+        const b = Math.min(255, Math.max(0, blue)) / 255;
 
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
