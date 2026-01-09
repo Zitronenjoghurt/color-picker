@@ -109,4 +109,18 @@ export class Color {
         return `rgb(${r}, ${g}, ${b})`;
     }
 
+    // https://www.101computing.net/complementary-colours-algorithm/
+    // for color preview (CSS version)
+    complementary(this: Color): string {
+        const [r, g, b] = this.toRGB();
+        const [comp_r, comp_g, comp_b] = [255 - r, 255 - g, 255 - b]
+        return `rgb(${comp_r}, ${comp_g}, ${comp_b})`
+    }
+
+    // data version
+    complementaryColor(this: Color): Color {
+        const [r, g, b] = this.toRGB();
+        return Color.fromRGB(255 - r, 255 - g, 255 - b);
+    }
+
 }

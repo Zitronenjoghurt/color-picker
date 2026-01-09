@@ -4,8 +4,11 @@ import {useState} from "react";
 import {Slider} from "radix-ui";
 import {Color} from "./types/Color.ts";
 import ColorCodeField, {ColorFormat} from "./components/ColorCodeField.tsx";
+import { useEffect, useRef } from "react";
+
 
 function App() {
+    const [showVideo, setShowVideo] = useState(false);
     const [color, setColor] = useState<Color>(new Color(0, 0, 0));
 
     const satLeft = new Color(color.hue, 0, color.val).toCssRGB();
@@ -26,9 +29,45 @@ function App() {
     ${valRight}
     )`;
 
+    const sequence = ["ArrowUp", "ArrowDown", "ArrowDown"];
+   
+    const indexRef = useRef(0);
+
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === sequence[indexRef.current]) {
+                indexRef.current++;
+
+                if (indexRef.current === sequence.length) {
+                    setShowVideo(prev => !prev); // toggle
+                    indexRef.current = 0;
+                }
+            } else {
+                indexRef.current = 0; // reset on wrong key
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
+
+
     return (
         <>
             <div style={{display: 'flex', flexDirection: 'row'}}>
+
+            {showVideo && (
+                <div style={{ marginRight: 50 }}>
+                    <iframe
+                        width="250"
+                        height="560"
+                        src="https://www.youtube.com/embed/zZ7AimPACzc?autoplay=1&mute=1"
+                        allow="autoplay; encrypted-media;"
+                    />
+                </div>
+            )}
+
+
                 <div style={{flexDirection: 'column'}}>
                     <ColorPicker color={color} setColor={setColor}/>
                     <form>
@@ -112,8 +151,8 @@ function App() {
                     <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.HEX}/>
                     <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.RGB}/>
                     <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.RGB_parentheses}/>
-                    <ColorCodeField color={color} setColor={setColor}
-                                    color_format={ColorFormat.RGB_parentheses_and_text}/>
+                    <ColorCodeField color={color} setColor={setColor} color_format={ColorFormat.RGB_parentheses_and_text}/>
+                    <div style={{display:'flex', justifyContent: 'center'}}>
                     <div
                         style={{
                             backgroundColor: color.toCssRGB(),
@@ -122,6 +161,19 @@ function App() {
                             marginLeft: '30px',
                             border: 'solid #ccc 1px'
                         }}>
+                    </div>
+                                        <div
+                        style={{
+                            backgroundColor: color.complementary(),
+                            width: '100px',
+                            height: '100px',
+                            marginLeft: '30px',
+                            border: 'solid #ccc 1px',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => setColor(color.complementaryColor())}
+                        >    
+                    </div>
                     </div>
                 </div>
 
